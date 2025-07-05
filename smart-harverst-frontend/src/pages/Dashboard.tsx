@@ -1,22 +1,32 @@
-import React from 'react';
-import BedCard from '../components/BedCard';
-import WeatherOverview from '../components/WeatherOverview';
-import { mockBeds } from '../data/mockBeds';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+// Use the component from the same directory
+import SupervisorDashboard from './SupervisorDashboard';
 
+// This acts as a router to the appropriate dashboard based on user role
 const Dashboard: React.FC = () => {
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Supervisor Dashboard</h1>
-      <div className="grid gap-6 mb-8">
-        <WeatherOverview />
+  const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Only redirect if we know the user is authenticated and is an owner
+    if (isAuthenticated && user?.role === 'owner') {
+      navigate('/owner-dashboard', { replace: true });
+    }
+  }, [user, navigate, isAuthenticated]);
+  
+  // Show loading state if authentication is still being determined
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockBeds.map((bed) => (
-          <BedCard key={bed.id} bed={bed} />
-        ))}
-      </div>
-    </div>
-  );
+    );
+  }
+  
+  // For supervisors, show supervisor dashboard
+  return <SupervisorDashboard />;
 };
 
 export default Dashboard;
