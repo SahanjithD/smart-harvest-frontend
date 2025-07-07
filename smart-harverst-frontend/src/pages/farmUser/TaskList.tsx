@@ -173,7 +173,7 @@ const TaskList: React.FC = () => {
   // Get color for status
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800';
+      case 'completed': return 'bg-emerald-100 text-emerald-800';
       case 'in-progress': return 'bg-blue-100 text-blue-800';
       case 'pending': return 'bg-yellow-100 text-yellow-800';
       case 'delayed': return 'bg-red-100 text-red-800';
@@ -202,7 +202,7 @@ const TaskList: React.FC = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <select 
-              className={`border rounded-md px-3 py-2 ${selectedBed ? 'border-primary-500 bg-primary-50' : ''}`}
+              className={`border rounded-md px-3 py-2 ${selectedBed ? 'border-emerald-500 bg-emerald-50' : ''}`}
               value={selectedBed}
               onChange={handleBedFilterChange}
             >
@@ -213,7 +213,7 @@ const TaskList: React.FC = () => {
             </select>
             
             <select 
-              className={`border rounded-md px-3 py-2 ${selectedStatus ? 'border-primary-500 bg-primary-50' : ''}`}
+              className={`border rounded-md px-3 py-2 ${selectedStatus ? 'border-emerald-500 bg-emerald-50' : ''}`}
               value={selectedStatus}
               onChange={handleStatusFilterChange}
             >
@@ -225,7 +225,7 @@ const TaskList: React.FC = () => {
             </select>
             
             <select 
-              className={`border rounded-md px-3 py-2 ${selectedPriority ? 'border-primary-500 bg-primary-50' : ''}`}
+              className={`border rounded-md px-3 py-2 ${selectedPriority ? 'border-emerald-500 bg-emerald-50' : ''}`}
               value={selectedPriority}
               onChange={handlePriorityFilterChange}
             >
@@ -275,7 +275,7 @@ const TaskList: React.FC = () => {
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Due Date
-                    <span className="ml-1 text-xs text-primary-600">↑</span>
+                    <span className="ml-1 text-xs text-emerald-600">↑</span>
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
@@ -311,7 +311,7 @@ const TaskList: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button 
                         onClick={() => handleViewBed(task.bedId)}
-                        className="text-primary-600 hover:text-primary-900 hover:underline"
+                        className="text-emerald-600 hover:text-emerald-900 hover:underline"
                       >
                         {bedNameMap[task.bedId] || task.bedId}
                       </button>
@@ -342,7 +342,7 @@ const TaskList: React.FC = () => {
                       {task.status !== 'completed' && (
                         <button
                           onClick={() => handleMarkComplete(task)}
-                          className="text-green-600 hover:text-green-900"
+                          className="text-emerald-600 hover:text-emerald-900"
                         >
                           Complete
                         </button>
@@ -394,7 +394,7 @@ const TaskList: React.FC = () => {
               <div className="flex text-sm text-gray-600 justify-center">
                 <label 
                   htmlFor="task-photo-upload" 
-                  className="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500"
+                  className="relative cursor-pointer bg-white rounded-md font-medium text-emerald-600 hover:text-emerald-500"
                 >
                   <span>Upload a photo</span>
                   <input 
@@ -429,7 +429,7 @@ const TaskList: React.FC = () => {
                 onClick={handlePhotoSubmit}
                 disabled={!selectedPhoto}
                 className={`px-4 py-2 rounded-md text-white 
-                  ${selectedPhoto ? 'bg-primary-600 hover:bg-primary-700' : 'bg-gray-300 cursor-not-allowed'}
+                  ${selectedPhoto ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-gray-300 cursor-not-allowed'}
                 `}
               >
                 Complete Task
