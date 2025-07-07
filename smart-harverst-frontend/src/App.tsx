@@ -10,6 +10,10 @@ import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './contexts/AuthContext'
 import StartingPage from './pages/StartingPage'
 import ClientLoginPage from './pages/clientUser/ClientLoginPage'
+import ClientRegisterPage from './pages/clientUser/ClientRegisterPage'
+import ClientDashboard from './pages/clientUser/ClientDashboard'
+import AccessedFarmDetailsPage from './pages/clientUser/AccessedFarmDetailsPage'
+import NotAccessedFarmDetailsPage from './pages/clientUser/NotAccessedFarmDetailsPage'
 import EndUserPortal from './pages/endUser/EndUserPortal'
 import './App.css'
 
@@ -24,8 +28,14 @@ function App() {
           {/* Farm user login */}
           <Route path="/farm-user/login" element={<LoginPage />} />
 
-          {/* Client user login */}
+          {/* Client user auth */}
           <Route path="/client-user/login" element={<ClientLoginPage />} />
+          <Route path="/client-user/register" element={<ClientRegisterPage />} />
+
+          {/* Client user dashboard and farm details */}
+          <Route path="/client-user/dashboard" element={<ClientDashboard />} />
+          <Route path="/client-user/farm/accessed/:id" element={<AccessedFarmDetailsPage />} />
+          <Route path="/client-user/farm/not-accessed/:id" element={<NotAccessedFarmDetailsPage />} />
 
           {/* End user portal */}
           <Route path="/end-user/portal" element={<EndUserPortal />} />
