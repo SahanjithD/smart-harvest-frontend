@@ -5,6 +5,7 @@ import OwnerDashboard from './pages/farmUser/OwnerDashboard'
 import SupervisorDashboard from './pages/farmUser/SupervisorDashboard'
 import TaskList from './pages/farmUser/TaskList'
 import FertilizerPlans from './pages/farmUser/FertilizerPlans'
+import BedDetails from './pages/farmUser/BedDetails'
 import LoginPage from './pages/farmUser/LoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './contexts/AuthContext'
@@ -48,6 +49,7 @@ function App() {
               <Route path="/fertilizer-plans" element={<FertilizerPlans />} />
               <Route path="/owner-dashboard" element={<OwnerDashboard />} />
               <Route path="/supervisor-dashboard" element={<SupervisorDashboard />} />
+              <Route path="/beds/:bedId" element={<BedDetails />} />
             </Route>
           </Route>
         </Routes>

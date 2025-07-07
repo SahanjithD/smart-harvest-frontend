@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import BedCard from '../../components/BedCard';
 import WeatherOverview from '../../components/WeatherOverview';
 import { mockBeds } from '../../data/mockBeds';
@@ -6,6 +7,12 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const OwnerDashboard: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  
+  // Function to handle bed card click
+  const handleBedCardClick = (bedId: string) => {
+    navigate(`/beds/${bedId}`);
+  };
   
   return (
     <div className="container mx-auto px-4 py-8">
@@ -66,7 +73,7 @@ const OwnerDashboard: React.FC = () => {
             <BedCard 
               key={bed.id} 
               bed={bed} 
-              onClick={() => console.log(`Navigate to bed ${bed.id}`)}
+              onClick={() => handleBedCardClick(bed.id)}
             />
           ))}
         </div>
