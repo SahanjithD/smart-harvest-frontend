@@ -11,7 +11,7 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   
   // Not authenticated, redirect to login
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace state={{ from: location }} />;
+    return <Navigate to="/farm-user/login" replace state={{ from: location }} />;
   }
   
   // Check role if restrictions exist
