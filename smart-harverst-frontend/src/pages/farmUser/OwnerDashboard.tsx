@@ -1,8 +1,8 @@
 import React from 'react';
-import BedCard from '../components/BedCard';
-import WeatherOverview from '../components/WeatherOverview';
-import { mockBeds } from '../data/mockBeds';
-import { useAuth } from '../contexts/AuthContext';
+import BedCard from '../../components/BedCard';
+import WeatherOverview from '../../components/WeatherOverview';
+import { mockBeds } from '../../data/mockBeds';
+import { useAuth } from '../../contexts/AuthContext';
 
 const OwnerDashboard: React.FC = () => {
   const { user } = useAuth();

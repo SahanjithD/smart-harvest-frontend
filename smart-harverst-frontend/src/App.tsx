@@ -1,13 +1,16 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import Dashboard from './pages/Dashboard'
-import OwnerDashboard from './pages/OwnerDashboard'
-import SupervisorDashboard from './pages/SupervisorDashboard'
-import TaskList from './pages/TaskList'
-import FertilizerPlans from './pages/FertilizerPlans'
-import LoginPage from './pages/LoginPage'
+import Dashboard from './pages/farmUser/Dashboard'
+import OwnerDashboard from './pages/farmUser/OwnerDashboard'
+import SupervisorDashboard from './pages/farmUser/SupervisorDashboard'
+import TaskList from './pages/farmUser/TaskList'
+import FertilizerPlans from './pages/farmUser/FertilizerPlans'
+import LoginPage from './pages/farmUser/LoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './contexts/AuthContext'
+import StartingPage from './pages/StartingPage'
+import ClientLoginPage from './pages/clientUser/ClientLoginPage'
+import EndUserPortal from './pages/endUser/EndUserPortal'
 import './App.css'
 
 function App() {
@@ -15,9 +18,18 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* Public routes */}
-          <Route path="/login" element={<LoginPage />} />
-          
+          {/* Starting page */}
+          <Route path="/" element={<StartingPage />} />
+
+          {/* Farm user login */}
+          <Route path="/farm-user/login" element={<LoginPage />} />
+
+          {/* Client user login */}
+          <Route path="/client-user/login" element={<ClientLoginPage />} />
+
+          {/* End user portal */}
+          <Route path="/end-user/portal" element={<EndUserPortal />} />
+
           {/* Routes with navbar */}
           <Route element={<ProtectedRoute />}>
             <Route 
@@ -38,9 +50,6 @@ function App() {
               <Route path="/supervisor-dashboard" element={<SupervisorDashboard />} />
             </Route>
           </Route>
-          
-          {/* Default route */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </Router>
     </AuthProvider>

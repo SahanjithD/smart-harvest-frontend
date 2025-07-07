@@ -1,8 +1,8 @@
 import React from 'react';
-import BedCard from '../components/BedCard';
-import WeatherOverview from '../components/WeatherOverview';
-import { mockBeds } from '../data/mockBeds';
-import { useAuth } from '../contexts/AuthContext';
+import BedCard from '../../components/BedCard';
+import WeatherOverview from '../../components/WeatherOverview';
+import { mockBeds } from '../../data/mockBeds';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Filter beds to simulate supervisor only seeing assigned beds
 const filteredBeds = mockBeds.slice(0, 4); // Only show first 4 beds for supervisor
