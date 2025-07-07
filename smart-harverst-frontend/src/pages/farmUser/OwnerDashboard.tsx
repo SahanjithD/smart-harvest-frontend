@@ -28,7 +28,7 @@ const OwnerDashboard: React.FC = () => {
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-4">Farm Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500">
+          <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-emerald-500">
             <p className="text-gray-500 text-sm">Total Beds</p>
             <p className="text-2xl font-bold">{mockBeds.length}</p>
           </div>
@@ -44,7 +44,7 @@ const OwnerDashboard: React.FC = () => {
               {mockBeds.filter(bed => bed.health === 'critical').length}
             </p>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
+          <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-emerald-600">
             <p className="text-gray-500 text-sm">Active Plans</p>
             <p className="text-2xl font-bold">3</p>
           </div>

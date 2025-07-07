@@ -8,7 +8,7 @@ interface BedCardProps {
 
 const BedCard: React.FC<BedCardProps> = ({ bed, onClick }) => {
   const healthColors = {
-    'healthy': 'bg-primary-100 border-primary-500',
+    'healthy': 'bg-emerald-100 border-emerald-500',
     'needs-attention': 'bg-yellow-100 border-yellow-500',
     'critical': 'bg-red-100 border-red-500'
   };
@@ -24,7 +24,7 @@ const BedCard: React.FC<BedCardProps> = ({ bed, onClick }) => {
   const getProgressBarColor = (progress: number) => {
     if (progress >= 75) return 'bg-red-500';
     if (progress >= 50) return 'bg-yellow-500';
-    return 'bg-primary-500';
+    return 'bg-emerald-500';
   };
 
   return (
