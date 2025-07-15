@@ -84,16 +84,18 @@ const Navbar: React.FC = () => {
               >
                 Task List
               </Link>
-              <Link
-                to="/fertilizer-plans"
-                className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                  isActive('/fertilizer-plans')
-                    ? 'text-white bg-gradient-to-r from-emerald-600 to-green-500 shadow-sm'
-                    : 'text-gray-700 hover:text-emerald-600'
-                }`}
-              >
-                Fertilizer Plans
-              </Link>
+              {user?.role !== 'owner' && (
+                <Link
+                  to="/fertilizer-plans"
+                  className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                    isActive('/fertilizer-plans')
+                      ? 'text-white bg-gradient-to-r from-emerald-600 to-green-500 shadow-sm'
+                      : 'text-gray-700 hover:text-emerald-600'
+                  }`}
+                >
+                  Fertilizer Plans
+                </Link>
+              )}
             </div>
           </div>
           
@@ -187,17 +189,19 @@ const Navbar: React.FC = () => {
             >
               Task List
             </Link>
-            <Link
-              to="/fertilizer-plans"
-              className={`block px-3 py-2 rounded-md text-base font-medium ${
-                isActive('/fertilizer-plans')
-                  ? 'text-white bg-gradient-to-r from-emerald-600 to-green-500'
-                  : 'text-gray-700 hover:bg-gray-50 hover:text-emerald-600'
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Fertilizer Plans
-            </Link>
+            {user?.role !== 'owner' && (
+              <Link
+                to="/fertilizer-plans"
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  isActive('/fertilizer-plans')
+                    ? 'text-white bg-gradient-to-r from-emerald-600 to-green-500'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-emerald-600'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Fertilizer Plans
+              </Link>
+            )}
           </div>
         </div>
       )}

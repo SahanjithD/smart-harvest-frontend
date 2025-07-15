@@ -12,6 +12,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import StartingPage from './pages/StartingPage'
 import ClientLoginPage from './pages/clientUser/ClientLoginPage'
 import EndUserPortal from './pages/endUser/EndUserPortal'
+import './styles/animations.css'
 import './App.css'
 
 function App() {
@@ -46,10 +47,25 @@ function App() {
               {/* Routes for all authenticated users */}
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/tasks" element={<TaskList />} />
-              <Route path="/fertilizer-plans" element={<FertilizerPlans />} />
               <Route path="/owner-dashboard" element={<OwnerDashboard />} />
               <Route path="/supervisor-dashboard" element={<SupervisorDashboard />} />
               <Route path="/beds/:bedId" element={<BedDetails />} />
+            </Route>
+          </Route>
+          
+          {/* Routes with role restrictions */}
+          <Route element={<ProtectedRoute allowedRoles={['supervisor']} />}>
+            <Route 
+              element={
+                <div className="min-h-screen bg-gray-50">
+                  <Navbar />
+                  <main className="pt-16">
+                    <Outlet />
+                  </main>
+                </div>
+              }
+            >
+              <Route path="/fertilizer-plans" element={<FertilizerPlans />} />
             </Route>
           </Route>
         </Routes>
