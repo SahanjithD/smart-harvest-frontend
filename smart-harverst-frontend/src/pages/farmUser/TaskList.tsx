@@ -48,8 +48,15 @@ const TaskList: React.FC = () => {
       result = result.filter(task => task.priority === selectedPriority);
     }
     
-    // Sort by due date (ascending)
-    result = [...result].sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+    // Sort by completion status (completed tasks at bottom), then by due date
+    result = [...result].sort((a, b) => {
+      // First sort by completion status
+      if (a.status === 'completed' && b.status !== 'completed') return 1;
+      if (a.status !== 'completed' && b.status === 'completed') return -1;
+      
+      // Then sort by due date (ascending)
+      return a.dueDate.getTime() - b.dueDate.getTime();
+    });
     
     setFilteredTasks(result);
   }, [tasks, selectedBed, selectedStatus, selectedPriority]);
@@ -255,10 +262,8 @@ const TaskList: React.FC = () => {
           {selectedStatus && `: ${selectedStatus.replace('-', ' ')}`}
           {selectedPriority && `: ${selectedPriority} priority`}
           {'. '}
-          <span className="italic">Sorted by due date (earliest first)</span>
-        </div>
-        
-        {filteredTasks.length === 0 ? (
+          <span className="italic">Sorted by status (completed tasks at bottom) and due date</span>
+        </div>          {filteredTasks.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-500">No tasks found matching your filters.</p>
           </div>
@@ -290,7 +295,7 @@ const TaskList: React.FC = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredTasks.map((task) => (
-                  <tr key={task.id} className={isOverdue(task) ? 'bg-red-50' : ''}>
+                  <tr key={task.id} className={`${isOverdue(task) ? 'bg-red-50' : ''} ${task.status === 'completed' ? 'bg-gray-50' : ''}`}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-start">
                         <div>

@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockBeds } from '../../data/mockBeds';
 import { getMockBedTasks, getMockFertilizerTimeline } from '../../data/mockTasks';
 import type { Bed } from '../../types/bed';
 import type { Task, TimelineEvent } from '../../types/task';
+import '../../styles/animations.css';
 
 const BedDetails: React.FC = () => {
   // Get the bed ID from the URL params
   const { bedId } = useParams<{ bedId: string }>();
   const navigate = useNavigate();
+  const timelineRef = useRef<HTMLDivElement>(null);
   
   const [bed, setBed] = useState<Bed | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -16,15 +18,50 @@ const BedDetails: React.FC = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [animateIn, setAnimateIn] = useState(false);
+  
+  // Animate in when component mounts
+  useEffect(() => {
+    // Short timeout to allow for page transition
+    setTimeout(() => setAnimateIn(true), 100);
+  }, []);
+  
+  // Observe timeline items for animation
+  useEffect(() => {
+    if (timelineRef.current && timeline.length > 0 && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('active');
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      
+      const timelineItems = timelineRef.current.querySelectorAll('.timeline-item');
+      timelineItems.forEach(item => observer.observe(item));
+      
+      return () => {
+        timelineItems.forEach(item => observer.unobserve(item));
+      };
+    }
+  }, [timeline, timelineRef]);
   
   // Fetch bed data, tasks, and timeline
   useEffect(() => {
     if (bedId) {
       const foundBed = mockBeds.find(b => b.id === bedId);
       if (foundBed) {
-        setBed(foundBed);
-        setTasks(getMockBedTasks(bedId));
-        setTimeline(getMockFertilizerTimeline(bedId));
+        // Simulate API call delay
+        setTimeout(() => {
+          setBed(foundBed);
+          setTasks(getMockBedTasks(bedId));
+          setTimeline(getMockFertilizerTimeline(bedId));
+          setLoading(false);
+        }, 800);
       } else {
         // Bed not found
         navigate('/dashboard');
@@ -56,6 +93,15 @@ const BedDetails: React.FC = () => {
     }
   };
 
+  // Handle page exit animation before navigation
+  const handleNavigateBack = () => {
+    // Add exit animation
+    document.body.classList.add('page-exit-active');
+    setTimeout(() => {
+      navigate(-1);
+    }, 300);
+  };
+
   // Format date for display
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', { 
@@ -74,8 +120,58 @@ const BedDetails: React.FC = () => {
     });
   };
 
-  if (!bed) {
-    return <div className="container mx-auto px-4 py-8">Loading...</div>;
+  if (loading || !bed) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Loading skeleton for bed information */}
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="h-8 w-1/4 loading-shimmer rounded mb-4"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <div className="mb-4">
+                    <div className="h-4 w-1/3 loading-shimmer rounded mb-2"></div>
+                    <div className="h-6 w-1/4 loading-shimmer rounded"></div>
+                  </div>
+                  <div className="mb-4">
+                    <div className="h-4 w-1/3 loading-shimmer rounded mb-2"></div>
+                    <div className="h-6 w-1/4 loading-shimmer rounded"></div>
+                  </div>
+                </div>
+                <div>
+                  <div className="mb-4">
+                    <div className="h-4 w-1/3 loading-shimmer rounded mb-2"></div>
+                    <div className="h-6 w-1/4 loading-shimmer rounded"></div>
+                  </div>
+                  <div className="mb-4">
+                    <div className="h-4 w-1/3 loading-shimmer rounded mb-2"></div>
+                    <div className="h-6 w-2/3 loading-shimmer rounded"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="h-8 w-1/3 loading-shimmer rounded mb-4"></div>
+              <div className="h-48 w-full loading-shimmer rounded"></div>
+            </div>
+          </div>
+          
+          {/* Loading skeleton for timeline */}
+          <div className="space-y-8">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="h-8 w-1/2 loading-shimmer rounded mb-4"></div>
+              <div className="space-y-4">
+                <div className="h-20 w-full loading-shimmer rounded"></div>
+                <div className="h-20 w-full loading-shimmer rounded"></div>
+                <div className="h-20 w-full loading-shimmer rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const getHealthColor = (health: string) => {
@@ -98,11 +194,11 @@ const BedDetails: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 animate-fade-in">
       {/* Back button */}
       <button 
-        onClick={() => navigate(-1)} 
-        className="flex items-center mb-4 text-gray-600 hover:text-gray-900"
+        onClick={handleNavigateBack} 
+        className="flex items-center mb-4 text-gray-600 hover:text-gray-900 hover-lift"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -111,7 +207,7 @@ const BedDetails: React.FC = () => {
       </button>
 
       {/* Bed header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 animate-slide-in-left">
         <div>
           <h1 className="text-2xl font-bold mb-2">{bed.name}</h1>
           <div className="flex items-center">
@@ -133,25 +229,25 @@ const BedDetails: React.FC = () => {
         {/* Left column - Bed info and photo upload */}
         <div className="lg:col-span-2 space-y-8">
           {/* Bed information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white rounded-lg shadow-sm p-6 animate-scale-in delay-100">
             <h2 className="text-xl font-semibold mb-4">Bed Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <div className="mb-4">
+                <div className="mb-4 staggered-item">
                   <h3 className="text-sm text-gray-600">Current Temperature</h3>
                   <p className="text-lg font-medium">{bed.currentTemp}°C</p>
                 </div>
-                <div className="mb-4">
+                <div className="mb-4 staggered-item">
                   <h3 className="text-sm text-gray-600">Humidity</h3>
                   <p className="text-lg font-medium">{bed.humidity}%</p>
                 </div>
               </div>
               <div>
-                <div className="mb-4">
+                <div className="mb-4 staggered-item">
                   <h3 className="text-sm text-gray-600">Soil Moisture</h3>
                   <p className="text-lg font-medium">{bed.soilMoisture}%</p>
                 </div>
-                <div className="mb-4">
+                <div className="mb-4 staggered-item">
                   <h3 className="text-sm text-gray-600">Last Watered</h3>
                   <p className="text-lg font-medium">{formatDate(bed.lastWatered)} at {formatTime(bed.lastWatered)}</p>
                 </div>
@@ -160,7 +256,7 @@ const BedDetails: React.FC = () => {
           </div>
 
           {/* Photo upload section */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white rounded-lg shadow-sm p-6 animate-scale-in delay-200">
             <h2 className="text-xl font-semibold mb-4">Plant Documentation</h2>
             <div className="mb-4">
               <span className="text-gray-600">Last Photo Taken:</span>
@@ -168,9 +264,9 @@ const BedDetails: React.FC = () => {
             </div>
             
             <form onSubmit={handlePhotoUpload} className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+              <div className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover-scale transition-all ${uploadSuccess ? 'photo-upload-success border-green-500' : ''}`}>
                 {photoPreview ? (
-                  <div className="mb-4">
+                  <div className="mb-4 animate-fade-in">
                     <img 
                       src={photoPreview} 
                       alt="Plant preview" 
@@ -197,7 +293,7 @@ const BedDetails: React.FC = () => {
                 <div className="flex text-sm text-gray-600 justify-center">
                   <label 
                     htmlFor="photo-upload" 
-                    className="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500"
+                    className="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500 hover-lift"
                   >
                     <span>Upload a photo</span>
                     <input 
@@ -219,7 +315,7 @@ const BedDetails: React.FC = () => {
               <button 
                 type="submit" 
                 disabled={!selectedPhoto}
-                className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white 
+                className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover-lift transition-all
                   ${selectedPhoto ? 'bg-primary-600 hover:bg-primary-700' : 'bg-gray-300 cursor-not-allowed'}
                 `}
               >
@@ -227,7 +323,7 @@ const BedDetails: React.FC = () => {
               </button>
               
               {uploadSuccess && (
-                <div className="p-4 bg-green-100 text-green-800 rounded-md text-center">
+                <div className="p-4 bg-green-100 text-green-800 rounded-md text-center animate-fade-in">
                   Photo uploaded successfully!
                 </div>
               )}
@@ -235,14 +331,14 @@ const BedDetails: React.FC = () => {
           </div>
 
           {/* Bed-specific tasks */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white rounded-lg shadow-sm p-6 animate-scale-in delay-300">
             <h2 className="text-xl font-semibold mb-4">Bed Tasks</h2>
             {tasks.length === 0 ? (
               <p className="text-gray-500">No tasks for this bed.</p>
             ) : (
               <ul className="divide-y divide-gray-200">
-                {tasks.map((task) => (
-                  <li key={task.id} className="py-4">
+                {tasks.map((task, index) => (
+                  <li key={task.id} className={`py-4 staggered-item`} style={{ animationDelay: `${300 + (index * 100)}ms` }}>
                     <div className="flex items-start justify-between">
                       <div>
                         <h3 className="text-base font-medium">{task.title}</h3>
@@ -263,7 +359,7 @@ const BedDetails: React.FC = () => {
                           )}
                         </div>
                       </div>
-                      <button className="bg-green-100 text-green-800 px-3 py-1 rounded-md text-sm">
+                      <button className="bg-green-100 text-green-800 px-3 py-1 rounded-md text-sm hover-lift transition-all hover:bg-green-200">
                         Mark Complete
                       </button>
                     </div>
